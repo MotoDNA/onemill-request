@@ -54,6 +54,7 @@
   .body { white-space: pre-wrap; word-break: break-word; margin: 8px 0 0; font-size: 15px; }
   .reply { margin-top: 10px; padding: 10px 12px; background: var(--bg); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0; font-size: 14px; white-space: pre-wrap; word-break: break-word; }
   .reply b { display: block; font-size: 12px; color: var(--sub); margin-bottom: 2px; }
+  .note { margin: 0 0 16px; padding: 10px 12px; background: #eef3ff; color: #1f3fa8; border-radius: 10px; font-size: 14px; }
   .empty { color: var(--sub); font-size: 14px; margin: 0; }
   .center { text-align: center; color: var(--sub); }
   footer { text-align: center; color: #9aa1ad; font-size: 12px; margin-top: 26px; }
@@ -85,6 +86,7 @@
   <div id="viewMain" hidden>
     <section class="card">
       <div class="top"><h2>새 수정요청</h2><button class="link" id="logoutBtn" type="button">나가기</button></div>
+      <p class="note">수정사항은 1시간마다 자동으로 수집하여 반영합니다.</p>
       <form id="reqForm">
         <label for="page">수정할 페이지 <span class="hint">· 예) 메인, 회사소개, 오시는 길</span></label>
         <input type="text" id="page" maxlength="200" placeholder="어느 페이지인지 적어 주세요">
