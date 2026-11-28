@@ -183,10 +183,19 @@ if (HOST) {
   window.addEventListener('message', e => {
     if (e.source !== HOST || !e.data || e.data.type !== 'onemill-pw' || e.data.c !== cid) return;
     if (pw || typeof e.data.pw !== 'string' || !e.data.pw) return;
+    clearTimeout(hostWait);
     login(e.data.pw, true);
   });
 }
-function askHost() { if (HOST && !pw) { try { HOST.postMessage({ type: 'onemill-ready', c: cid }, '*'); } catch (e) {} } }
+let hostWait = 0;
+function askHost() {
+  if (!HOST || pw) return false;
+  try { HOST.postMessage({ type: 'onemill-ready', c: cid }, '*'); } catch (e) { return false; }
+  // 관리자 페이지가 비밀번호를 건네주는 동안 비밀번호 칸 대신 "불러오는 중"을 보여 준다. 8초 안에 안 오면 비밀번호 칸.
+  notice('관리자 페이지에서 바로 연결하는 중입니다…');
+  hostWait = setTimeout(() => { if (!pw) show('viewLogin'); }, 8000);
+  return true;
+}
 
 $('loginForm').addEventListener('submit', e => {
   e.preventDefault();
@@ -314,7 +323,8 @@ $('reqForm').addEventListener('submit', async e => {
   if (API_URL.indexOf('http') !== 0) { notice('접수 시스템 설정이 아직 끝나지 않았습니다. 담당자에게 문의해 주세요.'); return; }
   if (!/^[a-z0-9]{8,40}$/.test(cid)) { notice('접수 링크가 올바르지 않습니다. 담당자에게 받은 링크를 다시 확인해 주세요.'); return; }
   const saved = store.get();
-  if (saved) login(saved, true); else { show('viewLogin'); askHost(); }
+  if (saved) { notice('불러오는 중입니다…'); login(saved, true); }
+  else if (!askHost()) show('viewLogin');
 })();
 </script>
 </body>
